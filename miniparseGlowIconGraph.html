@@ -160,7 +160,6 @@ td:last-child {
 		//
 
 		// エンカウント情報の定義
-		//var encounterDefine = "Time: <span class='enc'>{duration}</span> &nbsp;&nbsp;&nbsp;Total DPS: <span class='enc'>{dps}</span> &nbsp;&nbsp;&nbsp;Best Hit: <span class='enc'>{maxhit}</span>";
 		var encounterDefine =
 			"<div style=\"margin-left: 2%; margin-right: 2%; padding-bottom: 1.5em;\">" + 
 				"<div style=\"width: 25%; float: left; text-align: left;\">Time: <span class='enc'>{duration}</span></div>" +
@@ -357,32 +356,29 @@ td:last-child {
 			var combatantIndex = 0;
 			for (var combatantName in data.Combatant) {
 				var combatant = data.Combatant[combatantName];
-				 combatant.JobOrName = combatant.Job || combatantName;
-                		var egiSearch = combatant.JobOrName.indexOf("-Egi (");
-                		if (egiSearch != -1) {
-                    		combatant.JobOrName = combatant.JobOrName.substring(0, egiSearch);
-                		}
-                		else if (combatant.JobOrName.indexOf("Eos (") == 0) {
-                    		combatant.JobOrName = "Eos";
-                		}
-                		else if (combatant.JobOrName.indexOf("Selene (") == 0) {
-                    		combatant.JobOrName = "Selene";
-                		}
-                		else if (combatant.JobOrName.indexOf("Carbuncle (") != -1) {
-                    		// currently no carbuncle pics
-                		}
-                		else if (combatant.JobOrName.indexOf(" (") != -1) {
-                    		combatant.JobOrName = "choco";
-                		}
-                			
-                			var tableRow = newTableBody.insertRow(newTableBody.rows.length);
-                			for (var i = 0; i < bodyDefine.length; i++)
+				combatant.JobOrName = combatant.Job || combatantName;
+
+				var egiSearch = combatant.JobOrName.indexOf("-Egi (");
 				
+				if (egiSearch != -1) {
+					combatant.JobOrName = combatant.JobOrName.substring(0, egiSearch);
+				}
+				else if (combatant.JobOrName.indexOf("Eos (") == 0) {
+					combatant.JobOrName = "Eos";
+				}
+				else if (combatant.JobOrName.indexOf("Selene (") == 0) {
+					combatant.JobOrName = "Selene";
+				}
+				else if (combatant.JobOrName.indexOf("Carbuncle (") != -1) {
+					// currently no carbuncle pics
+				}
+				else if (combatant.JobOrName.indexOf(" (") != -1) {
+					combatant.JobOrName = "choco";
+				}
+						
+				var tableRow = newTableBody.insertRow(newTableBody.rows.length);
 
-
-
-
-				{
+				for (var i = 0; i < bodyDefine.length; i++) {
 					var cell = tableRow.insertCell(i);
 					// テキスト設定
 					if (typeof bodyDefine[i].text !== 'undefined') {
@@ -393,7 +389,8 @@ td:last-child {
 							cellText = parseActFormat(bodyDefine[i].text, combatant);
 						}
 						cell.innerText = cellText;
-					} else if (typeof bodyDefine[i].html !== 'undefined') {
+					}
+					else if (typeof bodyDefine[i].html !== 'undefined') {
 						var cellHTML;
 						if (typeof bodyDefine[i].html === 'function') {
 							cellHTML = bodyDefine[i].html(combatant, combatantIndex);
