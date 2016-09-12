@@ -5,7 +5,7 @@
 <style>
 
 * {
-	font-family: "Meiryo";
+	font-family: "Segoe UI";
 	font-size: 11px;
 }
 
@@ -78,44 +78,36 @@ td:last-child {
 	background-color: rgba(0,0,0,0.6);
 }
 
+/* Comment out the background to make the graph flat */
 #combatantTableBody td {
 	padding: 0px;
 	background: linear-gradient(to top, rgba(0,0,0,0.25) 0%,rgba(255,255,255,0.1) 100%);
 	background-blend-mode: soft-light;
 }
 
-#combatantTableBody .Gla td,
-#combatantTableBody .Pld td,
-#combatantTableBody .Mrd td,
-#combatantTableBody .Drk td,
-#combatantTableBody .War td {
+#combatantTableBody .Gla td, #combatantTableBody .Pld td,
+#combatantTableBody .Mrd td, #combatantTableBody .War td,
+#combatantTableBody .Drk td {
 	color: #ffffff;
 	background-color: rgba(41,112,243,0.2);
 	background-blend-mode: soft-light;
 }
 
-#combatantTableBody .Cnj td,
-#combatantTableBody .Whm td,
-#combatantTableBody .Ast td,
-#combatantTableBody .Sch td {
+#combatantTableBody .Cnj td, #combatantTableBody .Whm td,
+#combatantTableBody .Sch td,
+#combatantTableBody .Ast td {
 	color: #ffffff;
 	background-color: rgba(107,240,86,0.2);
 	background-blend-mode: soft-light;
 }
 
-#combatantTableBody .Pgl td,
-#combatantTableBody .Mnk td,
-#combatantTableBody .Lnc td,
-#combatantTableBody .Drg td,
-#combatantTableBody .Arc td,
-#combatantTableBody .Brd td,
-#combatantTableBody .Rog td,
-#combatantTableBody .Nin td,
-#combatantTableBody .Acn td,
-#combatantTableBody .Smn td,
-#combatantTableBody .Thm td,
-#combatantTableBody .Mch td,
-#combatantTableBody .Blm td {
+#combatantTableBody .Pgl td, #combatantTableBody .Mnk td,
+#combatantTableBody .Lnc td, #combatantTableBody .Drg td,
+#combatantTableBody .Arc td, #combatantTableBody .Brd td,
+#combatantTableBody .Rog td, #combatantTableBody .Nin td,
+#combatantTableBody .Acn td, #combatantTableBody .Smn td,
+#combatantTableBody .Thm td, #combatantTableBody .Blm td,
+#combatantTableBody .Mch td {
 	color: #ffffff;
 	background-color: rgba(200,3,8,0.2);
 	background-blend-mode: soft-light;
@@ -142,7 +134,7 @@ td:last-child {
         }
 
 </style>
-<script src="lib/jquery-2.1.1.min.js" type="text/javascript"></script>
+<script src="jquery-2.1.1.min.js" type="text/javascript"></script>
 <script>
 
 		//
@@ -168,7 +160,13 @@ td:last-child {
 		//
 
 		// エンカウント情報の定義
-		var encounterDefine = "Time:<span class='enc'>{duration}</span> &nbsp;&nbsp;&nbsp;Total DPS:<span class='enc'>{dps}</span> &nbsp;&nbsp;&nbsp;Best Hit:<span class='enc'>{maxhit}</span>";
+		//var encounterDefine = "Time: <span class='enc'>{duration}</span> &nbsp;&nbsp;&nbsp;Total DPS: <span class='enc'>{dps}</span> &nbsp;&nbsp;&nbsp;Best Hit: <span class='enc'>{maxhit}</span>";
+		var encounterDefine =
+			"<div style=\"margin-left: 2%; margin-right: 2%; padding-bottom: 1.5em;\">" + 
+				"<div style=\"width: 25%; float: left; text-align: left;\">Time: <span class='enc'>{duration}</span></div>" +
+				"<div style=\"width: 25%; float: left; text-align: center;\">Total DPS: <span class='enc'>{dps}</span></div>" +
+				"<div style=\"width: 50%; float: left; text-align: right;\">Best Hit: <span class='enc'>{maxhit}</span></div>" +
+			"</div>";
 
 		// 上記のエンカウント情報を HTML として扱うなら true
 		var useHTMLEncounterDefine = true;
@@ -176,27 +174,27 @@ td:last-child {
 		// ヘッダの定義
 		var headerDefine =
 		[
-			{ text: "Job", width: "2em", align: "center" },
-			{ text: "Name", width: "9em", align: "center" },
-			{ text: "DPS", width: "4em", align: "center" },
-			{ text: "DMG", width: "3.3em", align: "right" },
-			{ text: "", width: "3em", align: "left" },
-			{ text: "Crit", width: "2.5em", align: "center" },
-			{ text: "Miss", width: "2.5em", align: "center" },
+			{ text: "Job",   width: "2em",   align: "center" },
+			{ text: "Name",  width: "9em",   align: "center" },
+			{ text: "DPS",   width: "4em",   align: "center" },
+			{ text: "DMG",   width: "3.3em", align: "right"  },
+			{ text: "",      width: "3em",   align: "left"   },
+			{ text: "Crit",  width: "2.5em", align: "center" },
+			{ text: "Miss",  width: "2.5em", align: "center" },
 			{ text: "Death", width: "2.5em", align: "center" }
 		];
 
 		// 表示するデータの定義
 		var bodyDefine =
 		[
-			{ html: "<img src='./images/glow/{JobOrName}.png' style='width=60%;height:60%;' />", align: "center", effect: dpsBarEffect },
-			{ text: "{name}", width: "", align: "center",effect: myCharacterEffect },
-			{ text: "{encdps}", width: "", align: "center" },
-			{ text: "{damage}", width: "", align: "right" },
-			{ text: "({damage%})", width: "", align: "left" },
-			{ text: "{crithit%}", width: "", align: "center" },
-			{ text: "{misses}", width: "", align: "center", effect: redTextEffect },
-			{ text: "{deaths}", width: "", align: "center", effect: redTextEffect }
+			{ html: "<img src='./icons/{JobOrName}.png' style='width=60%;height:60%;' />", align: "center", effect: dpsBarEffect },
+			{ text: "{name}",      width: "", align: "center", effect: myCharacterEffect },
+			{ text: "{encdps}",    width: "", align: "center" },
+			{ text: "{damage}",    width: "", align: "right"  },
+			{ html: "&nbsp;({damage%})", width: "", align: "left"   },
+			{ text: "{crithit%}",  width: "", align: "center" },
+			{ text: "{misses}",    width: "", align: "center", effect: redTextEffect },
+			{ text: "{deaths}",    width: "", align: "center", effect: redTextEffect }
 		];
 
 		function myCharacterEffect(cell, combatant, index) {
@@ -228,7 +226,7 @@ td:last-child {
 
 		function dpsBarEffect(cell, combatant, index) {
     		var tank = ["Gla", "Pld", "Mrd", "War", "Drk"]
-			var dps = ["Pgl", "Mnk", "Lnc", "Drg", "Arc", "Brd", "Rog", "Nin", "Acn", "Smn", "Thm", "Blm", "Mch"]
+   		    var dps = ["Pgl", "Mnk", "Lnc", "Drg", "Arc", "Brd", "Rog", "Nin", "Acn", "Smn", "Thm", "Blm", "Mch"]
     		var healer = ["Cnj", "Whm", "Sch", "Ast"]
 
     		if (index == 0 || typeof dpsBarEffect.topdeeps == 'undefined') {
@@ -276,11 +274,6 @@ td:last-child {
 		// onOverlayDataUpdate イベントを購読
 		document.addEventListener("onOverlayDataUpdate", function (e) {
 			update(e.detail);
-		});
-		window.addEventListener("message", function (e) {
-			if (e.data.type === "onOverlayDataUpdate") {
-				update(e.data.detail);
-			}
 		});
 
 		// 表示要素の更新
@@ -458,7 +451,13 @@ td:last-child {
 					else {
 						var tag = str.slice(openBraceIndex + 1, closeBraceIndex);
 						if (typeof dictionary[tag] !== 'undefined') {
-							result += dictionary[tag];
+							switch (tag) {
+								case 'maxhit':
+									result += dictionary[tag].split('-').join(' - ');
+									break;
+								default:
+									result += dictionary[tag];
+							}
 						} else {
 							console.log("parseActFormat: Unknown tag: " + tag);
 							result += "ERROR";
